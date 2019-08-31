@@ -1,14 +1,19 @@
-const mongoose = require("mongodb");
-const config = require("config");
-const db = config.get("mongoURI");
+const mongoose = require('mongoose');
+const config = require('config');
+const db = config.get('mongoURI');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db, { useNewUrlParser: true });
-    console.log("Connected to database");
-  } catch (error) {
-    console.error(error.message);
-    // Exit process if could not connect to database
+    await mongoose.connect(db, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    });
+
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error(err.message);
+    // Exit process with failure
     process.exit(1);
   }
 };
