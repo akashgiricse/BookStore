@@ -10,7 +10,7 @@ const User = require('../../models/User');
 // @access Public
 router.get('/', async (req, res) => {
   try {
-    const books = await Book.find({ stock: { $gt: 0 } }).select('-stock');
+    const books = await Book.find({ stock: { $gt: 0 } });
     res.status(200).json(books);
   } catch (err) {
     console.log(err.message);
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 router.get('/:bookId', async (req, res) => {
   try {
     let bookId = req.params.bookId;
-    const book = await Book.findById(bookId).select('-stock');
+    const book = await Book.findById(bookId);
     if (!book) {
       return res
         .status(400)
