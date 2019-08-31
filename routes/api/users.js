@@ -35,7 +35,6 @@ router.post(
 
     try {
       let user = await User.findOne({ email });
-
       if (user) {
         return res
           .status(400)
@@ -45,12 +44,26 @@ router.post(
       const salt = await bcrypt.genSalt(10);
 
       let hashedPassword = await bcrypt.hash(password, salt);
+
       user = new User({
         name: name,
         email: email,
         password: hashedPassword,
         role: role
       });
+
+      // check if it is a Admin signup
+      if (req.headers.adminsignupkey) {
+        // check adminSignupKey
+        if (req.headers.adminsignupkey === config.get('adminSignupKey')) {
+          user = new User({
+            name: name,
+            email: email,
+            password: hashedPassword,
+            role: 1
+          });
+        }
+      }
 
       await user.save();
       const payload = {
