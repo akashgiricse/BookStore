@@ -1,3 +1,5 @@
 {
-    "mongoURI": ""
+    "mongoURI": "",
+    "jwtSecret": "",
+    "adminSignupKey": ""
 }
