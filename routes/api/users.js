@@ -20,10 +20,7 @@ router.post(
     check(
       'password',
       'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 }),
-    check('role', 'Invalid role, allowed 0 or 1')
-      .isIn([0, 1]) // 0 is for normal user while 1 is for admin
-      .optional()
+    ).isLength({ min: 6 })
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -31,7 +28,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     try {
       let user = await User.findOne({ email });
@@ -44,6 +41,15 @@ router.post(
       const salt = await bcrypt.genSalt(10);
 
       let hashedPassword = await bcrypt.hash(password, salt);
+      let role = 0; // for normal users, role is 0
+
+      // check if it is a Admin signup
+      if (req.headers.adminsignupkey) {
+        // check adminSignupKey
+        if (req.headers.adminsignupkey === config.get('adminSignupKey')) {
+          role = 1; // for admin, role is 1
+        }
+      }
 
       user = new User({
         name: name,
@@ -51,19 +57,6 @@ router.post(
         password: hashedPassword,
         role: role
       });
-
-      // check if it is a Admin signup
-      if (req.headers.adminsignupkey) {
-        // check adminSignupKey
-        if (req.headers.adminsignupkey === config.get('adminSignupKey')) {
-          user = new User({
-            name: name,
-            email: email,
-            password: hashedPassword,
-            role: 1
-          });
-        }
-      }
 
       await user.save();
       const payload = {
