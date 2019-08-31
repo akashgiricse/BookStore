@@ -41,9 +41,9 @@ router.post(
 
       let hashedPassword = await bcrypt.hash(password, salt);
       user = new User({
-        name,
-        email,
-        hashedPassword
+        name: name,
+        email: email,
+        password: hashedPassword
       });
 
       await user.save();
