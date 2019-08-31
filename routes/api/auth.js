@@ -13,7 +13,8 @@ const User = require('../../models/User');
 // @access Public
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    let id = req.user.id;
+    const user = await User.findById(id).select('-password');
     res.json(user);
   } catch (err) {
     console.log(err.message);
@@ -56,7 +57,8 @@ router.post(
       }
       const payload = {
         user: {
-          id: user.id
+          id: user.id,
+          role: user.role
         }
       };
 

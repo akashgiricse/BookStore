@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../../models/Book');
 const { check, validationResult } = require('express-validator');
+const auth = require('../../middleware/auth');
+const User = require('../../models/User');
 
 // @route  GET api/books
 // @desc   Get all book lst
@@ -16,12 +18,31 @@ router.get('/', async (req, res) => {
   }
 });
 
+// @route  GET api/books/:bookId
+// @desc   Get a book
+// @access Public
+router.get('/:bookId', async (req, res) => {
+  try {
+    let bookId = req.params.bookId;
+    const book = await Book.findById(bookId).select('-stock');
+    if (!book) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: 'Could not find a book by this id' }] });
+    }
+    res.status(200).json(book);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @router  POST api/books
 // @desc    Create Book
 // @access  Private
-
 router.post(
   '/',
+  auth,
   [
     check('title', 'Title must be between 2 to 100 characters ').isLength({
       min: 2,
@@ -51,6 +72,14 @@ router.post(
           .json({ errors: [{ message: 'Book already exists' }] });
       }
 
+      const isAdmin = await User.findById(req.user.id).select('-password');
+
+      if (isAdmin.role === 0) {
+        return res
+          .status(400)
+          .json({ errors: [{ message: 'Only admin can add books' }] });
+      }
+
       newBook = new Book({
         title: title,
         description: description ? description : null,
@@ -68,5 +97,65 @@ router.post(
     }
   }
 );
+
+// @route  PATCH api/books/:bookId
+// @desc   Update a book
+// @access Private
+router.patch('/:bookId', auth, async (req, res) => {
+  try {
+    let bookId = req.params.bookId;
+    const book = await Book.findById(bookId).select('-stock');
+    if (!book) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: 'Could not find a book by this id' }] });
+    }
+
+    const isAdmin = await User.findById(req.user.id).select('-password');
+
+    if (isAdmin.role === 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: 'Only admin can add books' }] });
+    }
+    const updateOptions = req.body;
+    await book.update({ $set: updateOptions });
+
+    res.status(200).json({ message: 'Successfully updated the book' });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route  DELETE api/books/:bookId
+// @desc   Delete a book
+// @access Private
+router.delete('/:bookId', auth, async (req, res) => {
+  try {
+    let bookId = req.params.bookId;
+    const book = await Book.findById(bookId).select('-stock');
+    if (!book) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: 'Could not find a book by this id' }] });
+    }
+
+    const isAdmin = await User.findById(req.user.id).select('-password');
+
+    if (isAdmin.role === 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: 'Only admin can delete a books' }] });
+    }
+
+    await book.delete();
+
+    res.status(200).json({ message: 'Successfully deleted the book' });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;
