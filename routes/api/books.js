@@ -6,7 +6,7 @@ const auth = require('../../middleware/auth');
 const User = require('../../models/User');
 
 // @route  GET api/books
-// @desc   Get all book lst
+// @desc   Get all book list
 // @access Public
 router.get('/', async (req, res) => {
   try {
