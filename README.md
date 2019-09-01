@@ -49,7 +49,7 @@ Book store API made using Node.js, Express.js, and MongoDB
    ```
 7. Use the API in Postman or any other API testing tool
 
-### Please refere [here](https://www.google.com) for API documentation
+### Please refere [here](https://github.com/akashgiricse/BookStore/blob/master/APIDoc.md) for API documentation
 
 ### Contributors
 
