@@ -53,7 +53,7 @@ Book store API made using Node.js, Express.js, and MongoDB
 
 ### Contributors
 
-- - [Akash Giri](https://github.com/akashgiricse)
+- [Akash Giri](https://github.com/akashgiricse)
 
 ### License
 
