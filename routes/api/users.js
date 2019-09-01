@@ -25,9 +25,8 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(401).json({ errors: errors.array() });
     }
-
     const { name, email, password } = req.body;
 
     try {
@@ -72,7 +71,7 @@ router.post(
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.status(201).json({ token });
         }
       );
     } catch (err) {
@@ -128,7 +127,7 @@ router.post(
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.status(200).json({ token });
         }
       );
     } catch (err) {
