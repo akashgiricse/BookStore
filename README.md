@@ -17,8 +17,8 @@ Book store API made using Node.js, Express.js, and MongoDB
 3. **User**
    - User signup / login feature available
    - User has 2 roles
-     _ Normal user
-     _ Admin user
+     - Normal user
+     - Admin user
    - A normal user can signup by _Name_, _Email_ and _Password_
    - For login, _Email_ and _Password_ is required
    - To register/signup as an **ADMIN**, an extra **admin-signup-key** is required which is not public
@@ -57,5 +57,5 @@ Book store API made using Node.js, Express.js, and MongoDB
 
 ### License
 
-MIT License
+MIT License <br>
 Copyright (c) 2019 Akash Giri.
