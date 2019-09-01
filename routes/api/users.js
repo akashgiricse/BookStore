@@ -44,9 +44,9 @@ router.post(
       let role = 0; // for normal users, role is 0
 
       // check if it is a Admin signup
-      if (req.headers.adminsignupkey) {
+      if (req.header('admin-signup-key')) {
         // check adminSignupKey
-        if (req.headers.adminsignupkey === config.get('adminSignupKey')) {
+        if (req.header('admin-signup-key') === config.get('admin-signup-key')) {
           role = 1; // for admin, role is 1
         }
       }
