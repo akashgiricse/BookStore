@@ -11,9 +11,24 @@ const User = require('../../models/User');
 // @access Private
 router.get('/', auth, async (req, res) => {
   try {
+    // Check if user exists
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(400).json({
+        errors: [{ message: 'This user does not exists' }]
+      });
+    }
+
     const purchases = await Purchase.find({ user: req.user.id })
       .populate('user', ['id', 'name'])
       .populate('book', ['id', 'title']);
+
+    if (purchases.length === 0) {
+      return res.status(200).json({
+        message: 'No purchase found for this user'
+      });
+    }
+
     res.status(200).json(purchases);
   } catch (err) {
     console.log(err.message);
@@ -26,6 +41,14 @@ router.get('/', auth, async (req, res) => {
 // @access Private
 router.get('/:purchaseId', auth, async (req, res) => {
   try {
+    // Check if user exists
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(400).json({
+        errors: [{ message: 'This user does not exists' }]
+      });
+    }
+
     let purchaseId = req.params.purchaseId;
 
     const purchase = await Purchase.findOne({
@@ -37,7 +60,7 @@ router.get('/:purchaseId', auth, async (req, res) => {
 
     if (!purchase) {
       return res.status(400).json({
-        errors: [{ message: 'Could not find any purchase by this id' }]
+        errors: [{ message: 'Could not find any purchase' }]
       });
     }
     res.status(200).json(purchase);
@@ -58,6 +81,14 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Check if user exists
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(400).json({
+        errors: [{ message: 'This user does not exists' }]
+      });
     }
 
     const bookId = req.body.bookId;
@@ -107,6 +138,14 @@ router.post(
 // @access Private
 router.delete('/:purchaseId', auth, async (req, res) => {
   try {
+    // Check if user exists
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(400).json({
+        errors: [{ message: 'This user does not exists' }]
+      });
+    }
+
     let purchaseId = req.params.purchaseId;
 
     const purchase = await Purchase.findOne({
@@ -116,7 +155,7 @@ router.delete('/:purchaseId', auth, async (req, res) => {
 
     if (!purchase) {
       return res.status(400).json({
-        errors: [{ message: 'Could not find any purchase by this id' }]
+        errors: [{ message: 'Could not find any purchase to delete' }]
       });
     }
 
