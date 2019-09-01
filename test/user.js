@@ -10,7 +10,7 @@ chai.use(http);
 //import User model
 const User = require('../models/User');
 
-describe('App basic tests', () => {
+describe('Users basic tests', () => {
   before(done => {
     //delete all users
     User.find()
@@ -41,6 +41,7 @@ describe('User registration', () => {
     chai
       .request(app)
       .post('/api/users/register')
+      .set('admin-signup-key', 'AdminRocks1234')
       .send(user_input)
       .then(res => {
         //validate
