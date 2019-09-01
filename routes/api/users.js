@@ -11,7 +11,7 @@ const User = require('../../models/User');
 // @desc     Register user
 // @access   Public
 router.post(
-  '/',
+  '/register',
   [
     check('name', 'Name is required')
       .not()

@@ -2,11 +2,11 @@
 
 ### 1. Users
 
-| Method/URI             | Description                                                                               | Access |
-| ---------------------- | ----------------------------------------------------------------------------------------- | ------ |
-| `POST` api/users       | Register a user <br> **Body**: name, email, password                                      | Public |
-| `POST` api/users       | Register an admin <br> **Body**: name, email, password <br> **Headers**: admin-signup-key | Public |
-| `POST` api/users/login | Login user and get token <br> **Body**: email, password                                   | Public |
+| Method/URI                | Description                                                                               | Access |
+| ------------------------- | ----------------------------------------------------------------------------------------- | ------ |
+| `POST` api/users/register | Register a user <br> **Body**: name, email, password                                      | Public |
+| `POST` api/users/register | Register an admin <br> **Body**: name, email, password <br> **Headers**: admin-signup-key | Public |
+| `POST` api/users/login    | Login user and get token <br> **Body**: email, password                                   | Public |
 
 ### 2. Books
 
