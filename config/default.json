@@ -1,5 +1,5 @@
 {
-    "mongoURI": "",
-    "jwtSecret": "",
-    "admin-signup-key": ""
+  "mongoURI": "mongodb://localhost:27017/bookstore",
+  "jwtSecret": "",
+  "admin-signup-key": ""
 }
